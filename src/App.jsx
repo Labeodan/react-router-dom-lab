@@ -1,35 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import NavBar from "./components/NavBar";
+import Mailbox from "./components/Mailbox";
+import NewMailbox from "./components/NewMailbox";
+import MailboxList from "./components/MailboxList";
+import { Routes, Route } from "react-router-dom";
+import Home from "./components/Home";
+import { useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+const initialState = [
+  { _id: 1, boxSize: 'Small', boxholder: 'Alex' },
+  { _id: 2, boxSize: 'Medium', boxholder: 'John' },
+  { _id: 3, boxSize: 'Large', boxholder: 'Emma' },
+  { _id: 4, boxSize: 'Small', boxholder: 'Sophia' },
+  { _id: 5, boxSize: 'Medium', boxholder: 'Michael' }
+];
+
+
+
+const App = () => {
+  const [mailboxes, setMailboxes] = useState(initialState)
+
+  const addNewMailbox = (input) => {
+    input._id = mailboxes.length + 1;
+    const updateMailboxs = [...mailboxes, input]
+    setMailboxes(updateMailboxs)
+
+  }
+
+
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <NavBar />
+      <Routes>
+        <Route path="/" element={ <Home />}/>
+        <Route path="/mailbox/:mailboxId" element={ <Mailbox mailboxes={mailboxes} />}/>
+        <Route path="/mailboxList" element={ <MailboxList mailboxes={mailboxes} />}/>
+        <Route path="mailbox/new" element={ <NewMailbox addNewMailbox={addNewMailbox}/>}/>
+        <Route path="*" element={ <h1>Oh No!, Page Not Found!</h1>}/>
+      </Routes>
     </>
   )
-}
+};
 
-export default App
+export default App;
